@@ -1,0 +1,19 @@
+{
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"run": "bun src/index.ts"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@phosphor-icons/core": "^2.1.1",
+		"sharp": "^0.35.5"
+	},
+	"prettier": {
+		"printWidth": 120,
+		"useTabs": true
+	},
+	"peerDependencies": {
+		"typescript": "^7"
+	}
+}

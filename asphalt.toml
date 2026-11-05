@@ -1,0 +1,13 @@
+#:schema https://raw.githubusercontent.com/jackTabsCode/asphalt/refs/heads/main/schema.json
+
+[creator]
+type = "user"
+id = 10014656431
+
+[codegen]
+style = "flat"
+strip_extensions = true
+
+[inputs.assets]
+path = "src/sheets/*"
+output_path = "src"
