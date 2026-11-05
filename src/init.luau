@@ -15,7 +15,7 @@ const ICON_SIZE = Vector2.new(32, 32)
 
 const ASSETS = {} :: { string }
 for key, asset in assets do
-	phosphor.ASSETS[tonumber(key)] = asset
+	ASSETS[tonumber(key)] = asset
 end
 
 const function locate(key: Key, weight: Weight?): (string, Vector2)
