@@ -1,6 +1,6 @@
 [package]
 name = "teamfireworks/prospero"
-version = "2.1.1-dev.2"
+version = "2.1.0-dev.2"
 description = "Phosphor Icons for Roblox"
 authors = ["rniraclefire"]
 repository = "https://github.com/teamfireworks/rbx-phosphor-icons"
