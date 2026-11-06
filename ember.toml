@@ -1,6 +1,6 @@
 [package]
 name = "teamfireworks/prospero"
-version = "2.1.0-dev.2"
+version = "3.0.0.0"
 description = "Phosphor Icons for Roblox"
 authors = ["rniraclefire"]
 repository = "https://github.com/teamfireworks/rbx-phosphor-icons"
@@ -14,3 +14,4 @@ main = "src/init.luau"
 luau-lsp = "johnnymorganz/luau-lsp@1.70.1"
 stylua = "johnnymorganz/stylua@2.6.0"
 asphalt = "jacktabscode/asphalt@2.0.2"
+
