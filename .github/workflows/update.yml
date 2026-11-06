@@ -80,6 +80,7 @@ jobs:
               with:
                   branch: chore/phosphor-${{ steps.version.outputs.latest }}
                   commit-message: "chore(upstream): ${{ steps.version.outputs.latest }}"
+                  title: "chore(upstream): ${{ steps.version.outputs.latest }}"
                   body: |
                       From `${{ steps.version.outputs.current }}` to `${{ steps.version.outputs.latest }}`
 
