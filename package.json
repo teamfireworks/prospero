@@ -9,8 +9,5 @@
 	"prettier": {
 		"printWidth": 120,
 		"useTabs": true
-	},
-	"dependencies": {
-		"smol-toml": "^1.9.1"
 	}
 }

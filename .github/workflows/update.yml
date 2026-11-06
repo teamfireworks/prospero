@@ -32,6 +32,9 @@ jobs:
                   ./embr self install
                   echo "$HOME/.ember/bin" >> "$GITHUB_PATH"
 
+            - name: Ember tools
+              run: embr install
+
             - name: Install Bun
               uses: oven-sh/setup-bun@v2
 
