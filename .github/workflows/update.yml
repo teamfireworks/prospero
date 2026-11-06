@@ -1,0 +1,84 @@
+name: update
+
+on:
+    schedule:
+        - cron: "0 0 * * 1"
+    workflow_dispatch:
+
+permissions:
+    contents: write
+    pull-requests: write
+
+concurrency:
+    group: update
+    cancel-in-progress: false
+
+jobs:
+    update:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Cache Ember tools
+              uses: actions/cache@v4
+              with:
+                  path: ~/.ember/tools
+                  key: ember-tools-${{ runner.os }}-${{ hashFiles('ember.toml') }}
+
+            - name: Install Ember
+              run: |
+                  curl -fsSL -o embr https://github.com/ember-luau/ember/releases/download/v1.0.0-rc.2/embr-linux-x86_64
+                  chmod +x embr
+                  ./embr self install
+                  echo "$HOME/.ember/bin" >> "$GITHUB_PATH"
+
+            - name: Install Bun
+              uses: oven-sh/setup-bun@v2
+
+            - name: Bun packages
+              run: bun install --frozen-lockfile
+
+            - name: Compare versions
+              id: version
+              run: |
+                  current=$(bun -e "console.log(require('@phosphor-icons/core/package.json').version)")
+                  latest=$(npm view @phosphor-icons/core version)
+                  echo "current=$current" >> "$GITHUB_OUTPUT"
+                  echo "latest=$latest" >> "$GITHUB_OUTPUT"
+                  if [ "$current" = "$latest" ]; then
+                    echo "Up to date ($current)"
+                    echo "changed=false" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "Update available: $current -> $latest"
+                    echo "changed=true" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Bump dependency
+              if: steps.version.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+              run: bun add @phosphor-icons/core@${{ steps.version.outputs.latest }}
+
+            - name: Repack
+              if: steps.version.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+              run: bun scripts/pack.ts
+
+            - name: Bump
+              if: steps.version.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+              run: bun scripts/bump.ts
+
+            - name: Sync assets
+              if: steps.version.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+              run: asphalt sync
+              env:
+                  ASPHALT_API_KEY: ${{ secrets.ASPHALT_API_KEY }}
+
+            - name: Open pull request
+              if: steps.version.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+              uses: peter-evans/create-pull-request@v7
+              with:
+                  branch: chore/phosphor-${{ steps.version.outputs.latest }}
+                  commit-message: "chore(upstream): ${{ steps.version.outputs.latest }}"
+                  body: |
+                      From `${{ steps.version.outputs.current }}` to `${{ steps.version.outputs.latest }}`
+
+                      Upstream changes: https://github.com/phosphor-icons/core/releases
+                  delete-branch: true

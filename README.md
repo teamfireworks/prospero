@@ -1,38 +1,36 @@
-# rbx-phosphor-icons
+# Prospero
 
-Repackages the [Phosphor](https://phosphoricons.com/) iconset for convenience
-with Roblox projects.
+[Phosphor Icons](https://phosphoricons.com/) for Roblox.
 
 ## Installation
 
-```
-embr add teamfireworks/rbx-phosphor-icons --alias=phosphor
+```sh
+embr add teamfireworks/prospero
 ```
 
 ## Usage
 
 ```luau
-const phosphor = require("@roblox_packages/phosphor")
+const prospero = require("@packages/roblox/prospero")
 
 -- simple
-const asset_id, offset = phosphor.locate("acorn")
+const id, offset = prospero.get("acorn", "duotone")
 const image = Instance.new("ImageLabel")
-image.Image = asset_id
-image.ImageRectSize = phosphor.ICON_SIZE
+image.Image = id
+image.ImageRectSize = prospero.ICON_SIZE
 image.ImageRectOffset = offset
 
 -- complex
-for weight, icons in phosphor.ICON_SETS do
-	for key, pack in icons do
-		print(`offset x: {pack.x}`)
-		print(`offset y: {pack.y}`)
-		print(`asset key: {pack.z}`)
-		print(`asset id: {phosphor.ASSETS[pack.z]}`)
+for weight, icons in prospero.ICON_SETS do
+	for icon, packed in icons do
+		print(icon, weight)
+		print(`\toffset: {prospero.offset(packed)}`)
+		print(`\timage id: {prospero.image(packed)]}`)
 	end
 end
 
 -- types
-const function locate(key: phosphor.Key, weight: phosphor.Weight)
+const function component(icon: prospero.Icon, weight: prospero.Weight)
 	-- ...
 end
 ```
